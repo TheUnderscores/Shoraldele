@@ -1,5 +1,5 @@
 #!/bin/bash
-if ["$GOPATH" == ""]; then
+if [ "$GOPATH" == "" ]; then
 	export GOPATH="$PWD"
 fi
 
