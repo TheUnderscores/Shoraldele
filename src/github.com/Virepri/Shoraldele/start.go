@@ -15,6 +15,8 @@ Routine: Recieves nothing. Should _ALWAYS_ be running until you recieve the "sto
 
 Basically, add a new line to each of the below maps with this setup:
 "<module name>":<what it wants>,
+
+and then, to the import statement, add the directory path to your module, ignoring src/
 */
 
 func main(){
