@@ -22,6 +22,9 @@ and then, to the import statement, add the directory path to your module, ignori
 */
 
 func main(){
+	//Don't un-defer this! needs to be defered so termo.Stop runs so that user's terminal doesn't get messed up upon exit
+	defer os.Exit(0)
+	
 	GlobalVars.ConfigLocs = map[string]string{
 		"input":"",
 	} //basically add your config location here.
@@ -45,6 +48,4 @@ func main(){
 	}
 
 	GlobalVars.WaitGroup.Wait()
-
-	os.Exit(0)
 }
