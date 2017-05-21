@@ -72,6 +72,7 @@ func handleKey (keycode tm.ScanCode) {
 			changeMode(Command)
 		} else {
 			buffer.Overwrite(int(buffer.GetCursorPosition()),string(keycode.Rune()))
+			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
 		}
 	case s(keycode, codes.Ci): //i
 		if CurrentMode == Select && HasSelection {
@@ -102,7 +103,7 @@ func handleKey (keycode tm.ScanCode) {
 	case s(keycode, codes.RIGHT):
 		if buffer.GetCursorPosition() < buffer.GetBufferSize() {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
-      if CurrentMode == Select {
+			if CurrentMode == Select {
 				selection.end++
 			}
 		}

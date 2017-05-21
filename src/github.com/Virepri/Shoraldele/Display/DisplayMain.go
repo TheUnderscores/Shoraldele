@@ -9,10 +9,9 @@ import (
 
 func DisplayInit(z string) {
 	framebuffer := termo.NewFramebuffer(80, 20) 
-
 	var State termo.CellState
 
-	State.Attrib = 0
+	State.Attrib = 5
 	State.FGColor = 30
 	State.BGColor = 80
 
