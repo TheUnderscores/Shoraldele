@@ -6,6 +6,7 @@ import(
 	"runtime"
 	"os"
 	"github.com/Virepri/Shoraldele/input"
+	"github.com/Virepri/Shoraldele/Display"
 )
 
 /*
@@ -24,18 +25,20 @@ and then, to the import statement, add the directory path to your module, ignori
 func main(){
 	GlobalVars.ConfigLocs = map[string]string{
 		"input":"",
+		"display":"",
 	} //basically add your config location here.
 	GlobalVars.SetupFuncs = map[string]func(string) {
 		"input":input.Setup,
+		"display":display.DisplayInit,
 	} //basically add your setup functions here. the input is meant to be a config location.
 	GlobalVars.ModuleRoutines = map[string]func() {
 		"input":input.Routine,
+		"display":display.Dummy,
 	} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
 
 	if err := termo.Init(); err != nil {
 		panic(err)
 	}
-	defer termo.Stop()
 	runtime.GOMAXPROCS(len(GlobalVars.ModuleRoutines))
 
 	for k,v := range GlobalVars.SetupFuncs {
