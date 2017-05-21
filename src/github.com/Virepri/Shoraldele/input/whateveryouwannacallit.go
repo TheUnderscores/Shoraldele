@@ -96,6 +96,7 @@ func min (a, b int) int {
 	}
 }
 		
+
 func s (a tm.ScanCode, b tm.ScanCode) bool {
 	return reflect.DeepEqual(a, b)
 }
