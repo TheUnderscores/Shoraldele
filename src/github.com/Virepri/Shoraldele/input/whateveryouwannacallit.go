@@ -27,6 +27,9 @@ var ModeChangeNotifiers [](chan<- ModeType)
 
 var HasSelection bool
 
+//If your file is more than 18.45 exabytes, you're fucked for so many other reasons besides the bitwidth of the cursor position
+var selection struct{start,end int}
+
 func Setup(_ string) {
 	return
 }
@@ -64,26 +67,53 @@ func handleKey (keycode tm.ScanCode) {
 		return
 	}
 	switch {
+	case CurrentMode == Insert:
+		if s(keycode, codes.ESC) {
+			changeMode(Command)
+		} else {
+			buffer.Overwrite(int(buffer.GetCursorPosition()),string(keycode.Rune()))
+		}
 	case s(keycode, codes.Ci): //i
+		if CurrentMode == Select && HasSelection {
+			buffer.Delete(int(selection.start),int(selection.end - selection.start))
+			HasSelection = false
+			selection = struct{ start, end int }{start:0, end:0}
+		}
 		changeMode(Insert)
 	case s(keycode, codes.Cs): //s
 		changeMode(Select)
-	case s(keycode, codes.Cc): //c
-		changeMode(Command)
+    selection.start, selection.end = buffer.GetCursorPosition(), buffer.GetCursorPosition()
+		HasSelection = true
+	//case s(keycode, codes.Cc): //c
+	//	changeMode(Command)
 
-	case s(keycode, codes.LEFT):
+
+	case s(keycode, codes.ESC):
+		changeMode(Command)
+		selection.start, selection.end = 0,0
+		HasSelection = false
+  case s(keycode, codes.LEFT):
 		if buffer.GetCursorPosition() > 0 {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
+      if CurrentMode == Select {
+				selection.start--
+			}
 		}
 	case s(keycode, codes.RIGHT):
 		if buffer.GetCursorPosition() < buffer.GetBufferSize() {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
+      if CurrentMode == Select {
+				selection.end++
+			}
 		}
 	case s(keycode, codes.UP):
 		line, char, lines := buffer.GetCursorLinePosition()
 		if line > 0 {
 			prevline := lines[line - 1]
 			buffer.SetCursorPosition(prevline[0] + min(prevline[1], char))
+      if CurrentMode == Select {
+			selection.start = prevline[0] + min(prevline[1], char)
+		  }
 		}
 	}
 }	

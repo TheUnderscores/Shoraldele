@@ -1,5 +1,7 @@
 package buffer
 
+import "strings"
+
 var work_buffer []byte
 
 var cursorPosition int
@@ -23,6 +25,14 @@ func Insert(offset int, data string) {
 
 func Delete(offset int, length int) {
 	work_buffer = append(work_buffer[:offset], work_buffer[offset+length:]...)
+}
+
+func Replace(torep, repwith string) {
+	t := string(work_buffer)
+
+	strings.Replace(t,torep,repwith,-1)
+
+	work_buffer = []byte(t)
 }
 
 func GetBufferContents(offset int, length int) []byte {
