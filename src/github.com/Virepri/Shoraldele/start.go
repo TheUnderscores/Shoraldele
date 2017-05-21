@@ -24,13 +24,10 @@ and then, to the import statement, add the directory path to your module, ignori
 
 func main(){
 	GlobalVars.ConfigLocs = map[string]string{
-		"buffer": "",
 	} //basically add your config location here.
 	GlobalVars.SetupFuncs = map[string]func(string) {
-		"buffer": buffer.Init,
 	} //basically add your setup functions here. the input is meant to be a config location.
 	GlobalVars.ModuleRoutines = map[string]func() {
-		"buffer": buffer.Entry,
 	} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
 
 	if err := termo.Init(); err != nil {

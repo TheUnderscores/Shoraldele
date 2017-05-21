@@ -16,14 +16,14 @@ func Insert(offset int, data string) {
 	}
 
 	copy(work_buffer[offset+len(data):], work_buffer[offset:])
-	overwrite(offset, data)
+	Overwrite(offset, data)
 }
 
 func Delete(offset int, length int) {
-	work_buffer = append(work_buffer[:offset], work_buffer[offset+len(data):])
+	work_buffer = append(work_buffer[:offset], work_buffer[offset+length:]...)
 }
 
-func GetBufferContents(offset int, length int) {
+func GetBufferContents(offset int, length int) []byte {
 	if length < 1 {
 		return work_buffer[offset:]
 	}
