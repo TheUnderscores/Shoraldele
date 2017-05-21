@@ -2,9 +2,7 @@ package main
 
 import(
 	"github.com/Virepri/Shoraldele/GlobalVars"
-	"github.com/Virepri/Shoraldele/Buffer"
 	"github.com/jonvaldes/termo"
-	"fmt"
 	"runtime"
 	"os"
 )
