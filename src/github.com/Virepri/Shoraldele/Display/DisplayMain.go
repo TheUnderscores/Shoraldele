@@ -5,7 +5,6 @@ import (
 	"github.com/Virepri/Shoraldele/Buffer"
 	"github.com/jonvaldes/termo"
 	"strings"
-	"fmt"
 )
 
 var running bool = true
@@ -18,28 +17,34 @@ func DisplayInit() {
 	w,h,_ := termo.Size()
 	f := termo.NewFramebuffer(w,h)
 
-	var State termo.CellState
+	var State, BarState termo.CellState
 
 	State.Attrib = 0
 	State.FGColor = termo.ColorGreen
 	State.BGColor = termo.ColorDefault
+
+	BarState.Attrib = 0
+	BarState.FGColor = termo.ColorDefault
+	BarState.BGColor = termo.ColorDefault
 
 	f.Clear()
 	f.Flush()
 	//termo.Init() //Init stuff
 	for running {
 		if _w, _h, _ := termo.Size(); w != _w || h != _h {
-			fmt.Printf("\033[H\033[2J")
+			f.Clear()
+			f.ASCIIRect(0,0,w-1,h-1,true,false)
+			f.Flush()
 			w = _w
 			h = _h
 			f = termo.NewFramebuffer(w, h)
 		}
 		f.Clear()
 
-		//f.AttribText(1, 1, State, string(buffer.GetBufferContents(0, -1)))
-
-
-		f.ASCIIRect(0,0,w-1,h-1,true,false)
+		for i := 0 ; i < w ; i++ {
+			f.AttribText(i, 0, BarState, "\u2550")
+			f.AttribText(i, h - 2, BarState, "\u2550")
+		}
 
 		f.AttribText(1,h-2, State, gv.MString)
 
