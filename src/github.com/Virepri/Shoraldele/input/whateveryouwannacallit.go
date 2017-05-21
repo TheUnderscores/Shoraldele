@@ -23,28 +23,21 @@ var CurrentMode ModeType //Defaults to 0, which is Command mode
 var ModeChangeNotifiers [](chan<- ModeType)
 
 func Setup(_ string) {
+	return
 }
 
-func Command(cmd string) {
-	switch(cmd){
-
-	}
-}
-
-func Routine {
+func Routine() {
 	defer gv.WaitGroup.Done()
 
-	
 	keychan := make(chan tm.ScanCode)
 	errchan := make(chan error)
 
 	tm.StartKeyReadLoop(keychan, errchan)
 
-	var keycode tm.ScanCode
 	for {
-		keycode = <-keychan
-		
+		handleKey(<-keychan)
 	}
+	return
 }
 
 func changeMode (new_mode ModeType) {
@@ -54,8 +47,24 @@ func changeMode (new_mode ModeType) {
 	} else {
 		CurrentMode = new_mode
 		// TODO: This should probably dispatch threads so that someone adding a chan but not listening does not block
-		for _, chn = range ModeChangeNotifiers {
+		for _, chn := range ModeChangeNotifiers {
 			chn <- new_mode
 		}
 	}
 }
+
+func handleKey (keycode tm.ScanCode) {
+	if keycode[0] == 27 { //ESC
+		changeMode(Command)
+		return
+	}
+	switch keycode[0] {
+	case 105: //i
+		changeMode(Insert)
+	case 115: //s
+		changeMode(Select)
+
+	case 99: //c
+		changeMode(Command)
+	}
+}	

@@ -2,6 +2,9 @@ package main
 
 import(
 	"github.com/Virepri/Shoraldele/GlobalVars"
+	"github.com/Virepri/Shoraldele/Buffer"
+	"github.com/jonvaldes/termo"
+	"fmt"
 	"runtime"
 	"os"
 )
@@ -20,11 +23,24 @@ and then, to the import statement, add the directory path to your module, ignori
 */
 
 func main(){
-	GlobalVars.ConfigLocs = map[string]string{} //basically add your config location here.
-	GlobalVars.SetupFuncs = map[string]func(string) {} //basically add your setup functions here. the input is meant to be a config location.
-	GlobalVars.CmdFuncs = map[string]func(string,string) {} //add your command function here
-	GlobalVars.ModuleRoutines = map[string]func() {} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
+	GlobalVars.ConfigLocs = map[string]string{
+		"buffer": "",
+	} //basically add your config location here.
+	GlobalVars.SetupFuncs = map[string]func(string) {
+		"buffer": buffer.Init,
+	} //basically add your setup functions here. the input is meant to be a config location.
+	GlobalVars.CmdFuncs = map[string]func(string,string) {
+		"buffer": buffer.PushCommand,
+	} //add your command function here
+	GlobalVars.ModuleRoutines = map[string]func() {
+		"buffer": buffer.Entry,
+	} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
 
+	if err := termo.Init(); err != nil {
+		panic(err)
+	}
+	defer termo.Stop()
+	
 	runtime.GOMAXPROCS(len(GlobalVars.ModuleRoutines))
 
 	for k,v := range GlobalVars.SetupFuncs {
@@ -34,5 +50,6 @@ func main(){
 	}
 
 	GlobalVars.WaitGroup.Wait()
+
 	os.Exit(0)
 }
