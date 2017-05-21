@@ -42,6 +42,7 @@ func main(){
 	if err := termo.Init(); err != nil {
 		panic(err)
 	}
+	defer termo.Stop()
 	runtime.GOMAXPROCS(len(GlobalVars.ModuleRoutines))
 
 	for k,v := range GlobalVars.SetupFuncs {
