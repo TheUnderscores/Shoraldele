@@ -27,9 +27,6 @@ var ModeChangeNotifiers [](chan<- ModeType)
 
 var HasSelection bool
 
-//If your file is more than 18.45 exabytes, you're fucked for so many other reasons besides the bitwidth of the cursor position
-var cursorPosition uint64
-
 func Setup(_ string) {
 	return
 }
@@ -75,18 +72,30 @@ func handleKey (keycode tm.ScanCode) {
 		changeMode(Command)
 
 	case s(keycode, codes.LEFT):
-		if cursorPosition > 0 {
-			cursorPosition--
+		if buffer.GetCursorPosition() > 0 {
+			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
 		}
 	case s(keycode, codes.RIGHT):
-		if cursorPosition < uint64(buffer.GetBufferSize()) {
-			cursorPosition++
+		if buffer.GetCursorPosition() < buffer.GetBufferSize() {
+			buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
 		}
 	case s(keycode, codes.UP):
-		//do stuff
+		line, char, lines := buffer.GetCursorLinePosition()
+		if line > 0 {
+			prevline := lines[line - 1]
+			buffer.SetCursorPosition(prevline[0] + min(prevline[1], char))
+		}
 	}
 }	
 
+func min (a, b int) int {
+	if (a < b) {
+		return a
+	} else {
+		return b
+	}
+}
+		
 func s (a tm.ScanCode, b tm.ScanCode) bool {
 	return reflect.DeepEqual(a, b)
 }
