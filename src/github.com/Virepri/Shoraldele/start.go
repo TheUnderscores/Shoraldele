@@ -1,6 +1,7 @@
 package main
 
 import(
+	//"github.github.com/Virepri/Shoraldele/FileIO"
 	"github.com/Virepri/Shoraldele/GlobalVars"
 	"github.com/jonvaldes/termo"
 	"runtime"
@@ -47,6 +48,10 @@ func main(){
 	}
 	defer termo.Stop()
 	runtime.GOMAXPROCS(len(GlobalVars.ModuleRoutines))
+
+	/*if len(os.Args) >= 2 {
+		FileIO.Read(os.Args[1])
+	}*/
 
 	for k,v := range GlobalVars.SetupFuncs {
 		v(GlobalVars.ConfigLocs[k]) //execute all setup functions

@@ -56,6 +56,7 @@ func changeMode (new_mode ModeType) {
 		return
 	} else {
 		CurrentMode = new_mode
+		gv.MString = []string{"Command","Insert","Select"}[int(CurrentMode)]
 		// TODO: This should probably dispatch threads so that someone adding a chan but not listening does not block
 		for _, chn := range ModeChangeNotifiers {
 			chn <- new_mode
