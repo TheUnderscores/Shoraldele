@@ -5,13 +5,14 @@ import (
 	"github.com/Virepri/Shoraldele/Buffer"
 )
 
-var file os.File
+var file *os.File
 
 func Read(name string) (string, error) {
-	if fi, err := os.OpenFile(name, os.O_RDWR | os.O_CREATE, 0755); err == nil {
-		finfo,_ := fi.Stat()
-		dat := make([]byte, finfo.Size())
-		fi.Read(dat)
+	var err error
+	if file, err = os.OpenFile(name, os.O_RDWR | os.O_CREATE, 0644); err == nil {
+		filenfo,_ := file.Stat()
+		dat := make([]byte, filenfo.Size())
+		file.Read(dat)
 		return string(dat), nil
 	} else {
 		return "", err
@@ -21,6 +22,5 @@ func Read(name string) (string, error) {
 func Write() {
 	dat := buffer.GetBufferContents(0,-1)
 	file.Truncate(0)
-	file.Sync()
-	file.Write(dat)
+	file.WriteAt(dat,0)
 }

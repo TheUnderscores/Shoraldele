@@ -8,6 +8,7 @@ import (
 	"github.com/Virepri/Shoraldele/Buffer"
 	"github.com/Virepri/Shoraldele/Codes"
 	"github.com/Virepri/Shoraldele/Display"
+	"github.com/Virepri/Shoraldele/FileIO"
 	"reflect"
 	//"fmt"
 )
@@ -103,6 +104,8 @@ func handleKey (keycode tm.ScanCode) {
 	case s(keycode, codes.Cq): //q
 		gv.WaitGroup.Done()
 		display.StopDisplay()
+	case s(keycode, codes.Cw):
+		FileIO.Write()
 	case s(keycode, codes.ESC):
 		changeMode(Command)
 		selection.start, selection.end = 0,0
