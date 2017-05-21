@@ -30,3 +30,7 @@ func GetBufferContents(offset int, length int) []byte {
 
 	return work_buffer[offset:offset + length]
 }
+
+func GetBufferSize() int {
+	return len(work_buffer)
+}
