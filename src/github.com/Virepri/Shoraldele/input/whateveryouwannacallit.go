@@ -9,6 +9,7 @@ import (
 	"github.com/Virepri/Shoraldele/Codes"
 	"github.com/Virepri/Shoraldele/Display"
 	"reflect"
+	//"fmt"
 )
 
 //http://stackoverflow.com/questions/14426366/what-is-an-idiomatic-way-of-representing-enums-in-go
@@ -71,6 +72,12 @@ func handleKey (keycode tm.ScanCode) {
 	case CurrentMode == Insert:
 		if s(keycode, codes.ESC) {
 			changeMode(Command)
+		} else if s(keycode, codes.BACKSP) {
+			//fmt.Println(string(buffer.GetBufferContents(0,-1)))
+			buffer.Delete(buffer.GetCursorPosition(),1)
+			if buffer.GetCursorPosition() > buffer.GetBufferSize() - 1 {
+				buffer.SetCursorPosition(buffer.GetBufferSize() - 1)
+			}
 		} else {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
 			buffer.Overwrite(int(buffer.GetCursorPosition()),string(keycode.Rune()))
