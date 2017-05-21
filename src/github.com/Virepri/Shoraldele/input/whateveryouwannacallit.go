@@ -8,7 +8,6 @@ import (
 	"github.com/Virepri/Shoraldele/Buffer"
 	"github.com/Virepri/Shoraldele/Codes"
 	"reflect"
-	"strings"
 )
 
 //http://stackoverflow.com/questions/14426366/what-is-an-idiomatic-way-of-representing-enums-in-go
@@ -29,7 +28,7 @@ var ModeChangeNotifiers [](chan<- ModeType)
 var HasSelection bool
 
 //If your file is more than 18.45 exabytes, you're fucked for so many other reasons besides the bitwidth of the cursor position
-var selection struct{start,end uint64}
+var selection struct{start,end int}
 
 func Setup(_ string) {
 	return
@@ -78,7 +77,7 @@ func handleKey (keycode tm.ScanCode) {
 		if CurrentMode == Select && HasSelection {
 			buffer.Delete(int(selection.start),int(selection.end - selection.start))
 			HasSelection = false
-			selection = struct{ start, end uint64 }{start:0, end:0}
+			selection = struct{ start, end int }{start:0, end:0}
 		}
 		changeMode(Insert)
 	case s(keycode, codes.Cs): //s
@@ -113,7 +112,7 @@ func handleKey (keycode tm.ScanCode) {
 			prevline := lines[line - 1]
 			buffer.SetCursorPosition(prevline[0] + min(prevline[1], char))
       if CurrentMode == Select {
-			selection.start = uint64(prevline[0] + min(prevline[1], char))
+			selection.start = prevline[0] + min(prevline[1], char)
 		  }
 		}
 	}
