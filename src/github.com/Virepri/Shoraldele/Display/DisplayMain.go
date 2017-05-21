@@ -5,10 +5,14 @@ import (
 	"github.com/jonvaldes/termo"
 )
 
+var running bool = true
 
+func StopDisplay() {
+	running = false
+}
 
-func DisplayInit(z string) {
-	framebuffer := termo.NewFramebuffer(80, 20) 
+func DisplayInit() {
+	framebuffer := termo.NewFramebuffer(80, 20)
 
 	var State termo.CellState
 
@@ -17,8 +21,7 @@ func DisplayInit(z string) {
 	State.BGColor = 80
 
 	termo.Init() //Init stuff
-	for {
-		
+	for running {
 		framebuffer.ASCIIRect(0, 0, 80, 20, true, false)//Here we draw an ascii rectangle of size 40x40
 
 		framebuffer.AttribText(1, 1, State, string(buffer.GetBufferContents(0, -1)))
@@ -29,6 +32,6 @@ func DisplayInit(z string) {
 	}
 }
 
-func Dummy(){
+func Dummy(_ string){
 
 }

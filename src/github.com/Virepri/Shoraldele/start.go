@@ -5,6 +5,7 @@ import(
 	"github.com/jonvaldes/termo"
 	"runtime"
 	"os"
+	"os/exec"
 	"github.com/Virepri/Shoraldele/input"
 	"github.com/Virepri/Shoraldele/Display"
 )
@@ -25,18 +26,19 @@ and then, to the import statement, add the directory path to your module, ignori
 func main(){
 	//Don't un-defer this! needs to be defered so termo.Stop runs so that user's terminal doesn't get messed up upon exit
 	defer os.Exit(0)
-	
+	defer exec.Command("clear")
+
 	GlobalVars.ConfigLocs = map[string]string{
 		"input":"",
 		"display":"",
 	} //basically add your config location here.
 	GlobalVars.SetupFuncs = map[string]func(string) {
 		"input":input.Setup,
-		"display":display.DisplayInit,
+		"display":display.Dummy,
 	} //basically add your setup functions here. the input is meant to be a config location.
 	GlobalVars.ModuleRoutines = map[string]func() {
 		"input":input.Routine,
-		"display":display.Dummy,
+		"display":display.DisplayInit,
 	} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
 
 	if err := termo.Init(); err != nil {

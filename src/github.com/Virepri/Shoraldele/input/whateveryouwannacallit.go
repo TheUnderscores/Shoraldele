@@ -7,6 +7,7 @@ import (
 	gv "github.com/Virepri/Shoraldele/GlobalVars"
 	"github.com/Virepri/Shoraldele/Buffer"
 	"github.com/Virepri/Shoraldele/Codes"
+	"github.com/Virepri/Shoraldele/Display"
 	"reflect"
 )
 
@@ -71,6 +72,7 @@ func handleKey (keycode tm.ScanCode) {
 		if s(keycode, codes.ESC) {
 			changeMode(Command)
 		} else {
+			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
 			buffer.Overwrite(int(buffer.GetCursorPosition()),string(keycode.Rune()))
 		}
 	case s(keycode, codes.Ci): //i
@@ -87,7 +89,9 @@ func handleKey (keycode tm.ScanCode) {
 	//case s(keycode, codes.Cc): //c
 	//	changeMode(Command)
 
-
+	case s(keycode, codes.Cq): //q
+		gv.WaitGroup.Done()
+		display.StopDisplay()
 	case s(keycode, codes.ESC):
 		changeMode(Command)
 		selection.start, selection.end = 0,0
@@ -125,7 +129,6 @@ func min (a, b int) int {
 		return b
 	}
 }
-		
 
 func s (a tm.ScanCode, b tm.ScanCode) bool {
 	return reflect.DeepEqual(a, b)
