@@ -3,6 +3,8 @@ package main
 import(
 	"github.com/Virepri/Shoraldele/GlobalVars"
 	"github.com/Virepri/Shoraldele/Buffer"
+	"github.com/jonvaldes/termo"
+	"fmt"
 	"runtime"
 	"os"
 )
@@ -34,6 +36,11 @@ func main(){
 		"buffer": buffer.Entry,
 	} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
 
+	if err := termo.Init(); err != nil {
+		panic(err)
+	}
+	defer termo.Stop()
+	
 	runtime.GOMAXPROCS(len(GlobalVars.ModuleRoutines))
 
 	for k,v := range GlobalVars.SetupFuncs {
@@ -43,5 +50,6 @@ func main(){
 	}
 
 	GlobalVars.WaitGroup.Wait()
+
 	os.Exit(0)
 }
