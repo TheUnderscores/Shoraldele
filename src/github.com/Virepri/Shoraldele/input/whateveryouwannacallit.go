@@ -73,12 +73,15 @@ func handleKey (keycode tm.ScanCode) {
 	case CurrentMode == Insert:
 		if s(keycode, codes.ESC) {
 			changeMode(Command)
-		} else if s(keycode, codes.BACKSP) {
+		} else if s(keycode, codes.BACKSP) || s(keycode, codes.DEL){
 			//fmt.Println(string(buffer.GetBufferContents(0,-1)))
 			buffer.Delete(buffer.GetCursorPosition(),0)
 			if !(buffer.GetCursorPosition() - 1 < 0) {
 				buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
 			}
+		} else if s(keycode, codes.ENTER) {
+			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
+			buffer.Insert(buffer.GetCursorPosition(), "\n")
 		} else {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
 			buffer.Overwrite(int(buffer.GetCursorPosition()),string(keycode.Rune()))
