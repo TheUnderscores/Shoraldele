@@ -29,7 +29,8 @@ func DisplayInit() {
 	//termo.Init() //Init stuff
 	for running {
 		if _w, _h, _ := termo.Size(); w != _w || h != _h {
-			fmt.Printf("\033[H\033[2J")
+			f.Clear()
+			f.Flush()
 			w = _w
 			h = _h
 			f = termo.NewFramebuffer(w, h)
