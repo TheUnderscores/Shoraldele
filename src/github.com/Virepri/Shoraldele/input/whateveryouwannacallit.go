@@ -82,7 +82,7 @@ func handleKey (keycode tm.ScanCode) {
 		changeMode(Insert)
 	case s(keycode, codes.Cs): //s
 		changeMode(Select)
-    selection.start, selection.end = buffer.GetCursorPosition(), buffer.GetCursorPosition()
+		selection.start, selection.end = buffer.GetCursorPosition(), buffer.GetCursorPosition()
 		HasSelection = true
 	//case s(keycode, codes.Cc): //c
 	//	changeMode(Command)
@@ -92,17 +92,17 @@ func handleKey (keycode tm.ScanCode) {
 		changeMode(Command)
 		selection.start, selection.end = 0,0
 		HasSelection = false
-  case s(keycode, codes.LEFT):
+	case s(keycode, codes.LEFT):
 		if buffer.GetCursorPosition() > 0 {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
-      if CurrentMode == Select {
+			if CurrentMode == Select {
 				selection.start--
 			}
 		}
 	case s(keycode, codes.RIGHT):
 		if buffer.GetCursorPosition() < buffer.GetBufferSize() {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
-      if CurrentMode == Select {
+			if CurrentMode == Select {
 				selection.end++
 			}
 		}
@@ -111,12 +111,12 @@ func handleKey (keycode tm.ScanCode) {
 		if line > 0 {
 			prevline := lines[line - 1]
 			buffer.SetCursorPosition(prevline[0] + min(prevline[1], char))
-      if CurrentMode == Select {
-			selection.start = prevline[0] + min(prevline[1], char)
-		  }
+			if CurrentMode == Select {
+				selection.start = prevline[0] + min(prevline[1], char)
+			}
 		}
 	}
-}	
+}
 
 func min (a, b int) int {
 	if (a < b) {
