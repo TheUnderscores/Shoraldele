@@ -37,11 +37,11 @@ func GetBufferSize() int {
 	return len(work_buffer)
 }
 
-func GetCursorPosition() uint64 {
+func GetCursorPosition() int {
 	return cursorPosition
 }
 
-func SetCursorPosition(newpos uint64) {
+func SetCursorPosition(newpos int) {
 	cursorPosition = newpos
 	//TODO: Call some function to notify output module
 }
