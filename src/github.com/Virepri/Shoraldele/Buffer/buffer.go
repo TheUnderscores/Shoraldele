@@ -1,19 +1,32 @@
 package buffer
 
-import(
-	"github.com/Virepri/Shoraldele/GlobalVars"
-	"fmt"
-)
+var work_buffer []byte
 
-func Init(ini string) {
-	fmt.Println("buffer.Init: STUB")
+func Overwrite(offset int, data string) {
+	if len(data) + len(work_buffer) > cap(work_buffer) {
+		work_buffer = append(work_buffer, make([]byte, 1024)...)
+	}
+
+	copy(work_buffer[offset:], []byte(data))
 }
 
-func Entry() {
-	fmt.Println("buffer.Entry: STUB")
-	GlobalVars.WaitGroup.Done()
+func Insert(offset int, data string) {
+	if len(data) + len(work_buffer) > cap(work_buffer) {
+		work_buffer = append(work_buffer, make([]byte, 1024)...)
+	}
+
+	copy(work_buffer[offset+len(data):], work_buffer[offset:])
+	overwrite(offset, data)
 }
 
-func PushCommand(cmd, args string) {
-	fmt.Println("buffer.PushCommand: STUB")
+func Delete(offset int, length int) {
+	work_buffer = append(work_buffer[:offset], work_buffer[offset+len(data):])
+}
+
+func GetBufferContents(offset int, length int) {
+	if length < 1 {
+		return work_buffer[offset:]
+	}
+
+	return work_buffer[offset:offset + length]
 }
