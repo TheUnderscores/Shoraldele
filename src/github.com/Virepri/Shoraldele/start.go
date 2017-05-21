@@ -7,9 +7,11 @@ import(
 	"runtime"
 	"os"
 	"os/exec"
-	//"fmt"
+	"fmt"
 	"github.com/Virepri/Shoraldele/input"
 	"github.com/Virepri/Shoraldele/Display"
+	"github.com/Virepri/Shoraldele/FileIO"
+	"github.com/Virepri/Shoraldele/Buffer"
 )
 
 /*
@@ -49,12 +51,19 @@ func main(){
 	defer termo.Stop()
 	runtime.GOMAXPROCS(len(GlobalVars.ModuleRoutines))
 
-	/*if len(os.Args) >= 2 {
-		FileIO.Read(os.Args[1])
-	}*/
+	if len(os.Args) >= 2 {
+		data, err := FileIO.Read(os.Args[1])
+
+		if err != nil {
+			fmt.Println("Herpderp! Can't read!")
+			os.Exit(6)
+		}
+
+		buffer.Insert(0, data)
+	}
 
 	for k,v := range GlobalVars.SetupFuncs {
-		v(GlobalVars.ConfigLocs[k]) //execute all setup functions
+		v(GlobalVars.ConfigLocs[k]) //execute all setup function
 		go GlobalVars.ModuleRoutines[k]()
 		GlobalVars.WaitGroup.Add(1)
 	}
