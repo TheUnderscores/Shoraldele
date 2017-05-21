@@ -41,7 +41,7 @@ var (
 	CW      = tm.ScanCode{87, 0, 0, 0, 0, 0}
 	CX      = tm.ScanCode{88, 0, 0, 0, 0, 0}
 	CY      = tm.ScanCode{89, 0, 0, 0, 0, 0}
-	CZ      = tm.ScanCode{90, 0, 0, 0, 0, 0}magic out of my fucking ass
+	CZ      = tm.ScanCode{90, 0, 0, 0, 0, 0}
 
 	Ca      = tm.ScanCode{97, 0, 0, 0, 0, 0}
 	Cb      = tm.ScanCode{98, 0, 0, 0, 0, 0}
