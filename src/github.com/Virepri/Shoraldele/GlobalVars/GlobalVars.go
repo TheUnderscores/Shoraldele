@@ -3,7 +3,7 @@ package GlobalVars
 import "sync"
 
 type Command struct {
-	command, args string
+	Command, Args string
 }
 
 var ConfigLocs map[string]string
