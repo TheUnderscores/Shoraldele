@@ -29,7 +29,6 @@ var ModeChangeNotifiers [](chan<- ModeType)
 var HasSelection bool
 
 //If your file is more than 18.45 exabytes, you're fucked for so many other reasons besides the bitwidth of the cursor position
-var cursorPosition uint64
 var selection struct{start,end uint64}
 
 func Setup(_ string) {
@@ -73,7 +72,7 @@ func handleKey (keycode tm.ScanCode) {
 		if s(keycode, codes.ESC) {
 			changeMode(Command)
 		} else {
-			buffer.Overwrite(int(cursorPosition),string(keycode.Rune()))
+			buffer.Overwrite(int(buffer.GetCursorPosition()),string(keycode.Rune()))
 		}
 	case s(keycode, codes.Ci): //i
 		if CurrentMode == Select && HasSelection {
@@ -84,41 +83,50 @@ func handleKey (keycode tm.ScanCode) {
 		changeMode(Insert)
 	case s(keycode, codes.Cs): //s
 		changeMode(Select)
-		selection.start, selection.end = cursorPosition, cursorPosition
+    selection.start, selection.end = buffer.GetCursorPosition(), buffer.GetCursorPosition()
 		HasSelection = true
 	//case s(keycode, codes.Cc): //c
 	//	changeMode(Command)
 
-	case s(keycode, codes.LEFT):
-		if cursorPosition > 0 {
-			cursorPosition--
-			if CurrentMode == Select {
-				selection.start--
-			}
-		}
-	case s(keycode, codes.RIGHT):
-		if cursorPosition < uint64(buffer.GetBufferSize()) {
-			cursorPosition++
-			if CurrentMode == Select {
-				selection.end++
-			}
-		}
-	case s(keycode, codes.UP):
-		//do stuff
-		buf := string(buffer.GetBufferContents(0,-1)[:cursorPosition+1])
-		buf = buf[:strings.LastIndex(buf,"\n")]
-		buf = buf[:strings.LastIndex(buf,"\n")]
-		cursorPosition = uint64(len(buf)-1)
-		if CurrentMode == Select {
-			selection.start = uint64(len(buf)-1)
-		}
 
 	case s(keycode, codes.ESC):
 		changeMode(Command)
 		selection.start, selection.end = 0,0
 		HasSelection = false
+  case s(keycode, codes.LEFT):
+		if buffer.GetCursorPosition() > 0 {
+			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
+      if CurrentMode == Select {
+				selection.start--
+			}
+		}
+	case s(keycode, codes.RIGHT):
+		if buffer.GetCursorPosition() < buffer.GetBufferSize() {
+			buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
+      if CurrentMode == Select {
+				selection.end++
+			}
+		}
+	case s(keycode, codes.UP):
+		line, char, lines := buffer.GetCursorLinePosition()
+		if line > 0 {
+			prevline := lines[line - 1]
+			buffer.SetCursorPosition(prevline[0] + min(prevline[1], char))
+      if CurrentMode == Select {
+			selection.start = uint64(prevline[0] + min(prevline[1], char))
+		  }
+		}
 	}
 }	
+
+func min (a, b int) int {
+	if (a < b) {
+		return a
+	} else {
+		return b
+	}
+}
+		
 
 func s (a tm.ScanCode, b tm.ScanCode) bool {
 	return reflect.DeepEqual(a, b)
