@@ -24,7 +24,13 @@ func Insert(offset int, data string) {
 }
 
 func Delete(offset int, length int) {
-	work_buffer = append(work_buffer[:offset], work_buffer[offset+length:]...)
+	if length == 0 { //delete just this character.
+		work_buffer = append(work_buffer[:offset], work_buffer[offset+1:]...)
+	} else if !(offset + length > GetBufferSize()-1) {
+		work_buffer = work_buffer[:offset]
+	} else {
+		work_buffer = append(work_buffer[:offset], work_buffer[offset+length:]...)
+	}
 }
 
 func Replace(torep, repwith string) {

@@ -28,7 +28,7 @@ func main(){
 	//Don't un-defer this! needs to be defered so termo.Stop runs so that user's terminal doesn't get messed up upon exit
 	defer os.Exit(0)
 	defer exec.Command("reset")
-
+	exec.Command("reset")
 	GlobalVars.ConfigLocs = map[string]string{
 		"input":"",
 		"display":"",

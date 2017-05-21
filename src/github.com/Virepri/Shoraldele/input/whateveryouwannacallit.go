@@ -74,9 +74,9 @@ func handleKey (keycode tm.ScanCode) {
 			changeMode(Command)
 		} else if s(keycode, codes.BACKSP) {
 			//fmt.Println(string(buffer.GetBufferContents(0,-1)))
-			buffer.Delete(buffer.GetCursorPosition(),1)
-			if buffer.GetCursorPosition() > buffer.GetBufferSize() - 1 {
-				buffer.SetCursorPosition(buffer.GetBufferSize() - 1)
+			buffer.Delete(buffer.GetCursorPosition(),0)
+			if !(buffer.GetCursorPosition() - 1 < 0) {
+				buffer.SetCursorPosition(buffer.GetCursorPosition() - 1)
 			}
 		} else {
 			buffer.SetCursorPosition(buffer.GetCursorPosition() + 1)
