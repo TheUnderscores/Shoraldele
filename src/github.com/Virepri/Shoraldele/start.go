@@ -39,6 +39,8 @@ func main(){
 		"display":display.Dummy,
 	} //add your goroutine function here. This should NOT stop until you recieve a "stop" command.
 
+	defer termo.Stop() 
+
 	if err := termo.Init(); err != nil {
 		panic(err)
 	}
