@@ -11,3 +11,9 @@ Basically, to build,
 To edit source
 
 `source setup.sh`
+
+## Using
+
+Protip: Don't
+
+But if you really want to, specify what file to edit as the arugument when running shoraldele. Once running, `i` goes into insert mode, esc goes back to command mode, `o` to write out.
